@@ -1,0 +1,12 @@
+<from method="post">
+    {% csrf_token %}
+    <label>Contraseña actual:</label>
+    <input type="password" name="actual">
+    <label>Nueva contraseña:</label>
+    <input type="password" name="Nueva">
+    <button type "submit">Cambiar</button>
+    {% for message in messages %}
+        <p>{{message}} </p>
+    {% endfor %}
+
+</form>

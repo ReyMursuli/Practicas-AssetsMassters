@@ -1,0 +1,13 @@
+<form method="post">
+    {% csrf_token %}
+    <label>Nombre:</label>
+    <input type="text" name="nombre">
+    <label>Contraseña:</label>
+    <input type="password" name="contrasenya">
+    <button type="submit">Ingresar</button>
+    {% for message in messages %}
+        <p>{{message}} </p>
+    {% endfor %}
+
+</form>
+
