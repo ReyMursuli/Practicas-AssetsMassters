@@ -11,7 +11,7 @@ class Area(models.Model):
     nombre = models.CharField(max_length=150)
     codigo = models.CharField(max_length=150)
     
-class Activo(models):
+class Activo(models.Model):
     cod_interno=models.CharField(max_length=50,unique=True)
     rotulo = models.CharField(max_length=50) 
     nombre =models.CharField(max_length=255)
@@ -23,20 +23,20 @@ class Activo(models):
     qr_code = models.ImageField(upload_to='qrcodes',blank=True,null=True)
     
     area=models.ForeignKey(Area,on_delete=models.CASCADE,related_name='activos')
-    responsable=models.ForeignKey(Responsable,on_delete=models.SET_NULL,null=True,blank=True,related_name='Activos asignados')
+    responsable=models.ForeignKey(Responsable,on_delete=models.SET_NULL,null=True,blank=True,related_name='activos_asignados')
     
     def __str__(self):
         return f"{self.cod_interno}-{self.nombre}"
     
     
     def save (self,*args,**kwargs):
-        super().save(*args,**kwargs)
+        super(Activo,self).save(*args,**kwargs)
         
         if not self.qr_code:
             qr=qrcode.make(f"Activo:{self.cod_interno}-{self.nombre}")
             buffer=BytesIO()
             qr.save(buffer,fromat='PNG')
-            nombre_archivo=generar_nombre_qr(self.codigo)
-            self.qr_code.save(nombre_archivo,File=buffer)
-            super().save(*args, **kwargs)
+            nombre_archivo=generar_nombre_qr(self.cod_interno)
+            self.qr_code.save(nombre_archivo,File=buffer,save=False)
+            super(Activo,self).save(*args, **kwargs)
     

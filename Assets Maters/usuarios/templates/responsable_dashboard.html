@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}Panel Jefe Departamento{% endblock %}
+{% block content %}
+    <h2 class="text-primary">Hola, {{ usuario.nombre }}</h2>
+    
+
+    <div class="card mt-4">
+        <div class="card-body">
+            <h5 class="card-title">Activos a tu cargo</h5>
+            <ul>
+                {% for activo in activos %}
+                    <li>{{ activo.nombre }} - {{ activo.cod_interno }}</li>
+                {% empty %}
+                    <li>No tienes activos asignados.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endblock %}

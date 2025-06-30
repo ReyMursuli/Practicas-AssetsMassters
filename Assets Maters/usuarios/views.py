@@ -1,6 +1,7 @@
 from django.shortcuts import render,redirect
 from django.contrib import messages
 from .models import UsuarioGenerico
+from gestiom_activos.models import Activo
 
 
 # Create your views here.
@@ -14,7 +15,7 @@ def login_view(request):
             if usuario.check_password(contrasenya):
                 request.session['usuario_id']=usuario.id
                 messages.success(request,'Login Exitoso')
-                return redirect('home')
+                return redirect('dashboard')
             else:
                 messages.error(request,'Contraseña Incorrecta')
         except UsuarioGenerico.DoesNotExist:
@@ -48,8 +49,17 @@ def cambiar_contrasenya(request):
             
     return render(request,'cambiar_contrasenya.html')
 
-def home(request):
-    if 'usuario_id' not in request.session:
+def dashboard_view(request):
+    usuario_id = request.session.get('usuario_id')
+
+    if not usuario_id:
         return redirect('login')
-    usuario = UsuarioGenerico.objects.get(id=request.session['usuario_id'])
-    return render(request,'home.html',{'usuario':usuario})
+
+    usuario = UsuarioGenerico.objects.get(id=usuario_id)
+
+    if hasattr(usuario, 'responsable'):
+        responsable = usuario.responsable
+        activos = Activo.objects.filter(responsable=responsable)
+        return render(request, 'responsable_dashboard.html', {'usuario': usuario, 'activos': activos})
+    else:
+        return render(request, 'dashboard.html', {'usuario': usuario})

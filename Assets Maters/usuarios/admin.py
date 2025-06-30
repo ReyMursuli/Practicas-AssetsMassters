@@ -11,6 +11,7 @@ class UsuarioGenericoAdmin(admin.ModelAdmin):
             obj.set_password(raw_password)
         super().save_model(request, obj, form, change)
 
+
 class ResponsableAdmin(admin.ModelAdmin):
     list_display = ('nombre', 'codigo')
     fields = ('nombre', 'contrasenya', 'codigo')

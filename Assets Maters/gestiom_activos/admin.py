@@ -4,7 +4,7 @@ from django.utils.html import mark_safe
 
 # Register your models here.
 class ActivoAdmin(admin.ModelAdmin):
-    list_display=('codigo','rotulo','mostrar_qr')
+    list_display=('cod_interno','rotulo','mostrar_qr')
 
     def mostrar_qr(self,obj):
         if obj.qr_code:
