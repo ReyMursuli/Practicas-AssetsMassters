@@ -1,19 +1,48 @@
 {% extends 'base.html' %}
-{% block title %}Panel Jefe Departamento{% endblock %}
+{% block title %}Panel Responsable{% endblock %}
 {% block content %}
     <h2 class="text-primary">Hola, {{ usuario.nombre }}</h2>
-    
-
+    <div class="mb-3 d-flex gap-2">
+        <a href="{% url 'gestiom_activos:generar_reporte_pdf' %}" class="btn btn-primary">Exportar a PDF</a>
+        <a href="{% url 'gestiom_activos:controlar_activos' %}" class="btn btn-primary">Controlar Activos</a>
+    </div>
     <div class="card mt-4">
         <div class="card-body">
             <h5 class="card-title">Activos a tu cargo</h5>
-            <ul>
-                {% for activo in activos %}
-                    <li>{{ activo.nombre }} - {{ activo.cod_interno }}</li>
-                {% empty %}
-                    <li>No tienes activos asignados.</li>
-                {% endfor %}
-            </ul>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Código</th>
+                            <th>Rótulo</th>
+                            <th>Tipo</th>
+                            <th>Descripción</th>
+                            <th>Valor Inicial</th>
+                            <th>Valor Residual</th>
+                            <th>Depreciación</th>
+                            <th>Área</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for activo in activos %}
+                        <tr>
+                            <td>{{ activo.cod_interno }}</td>
+                            <td>{{ activo.rotulo }}</td>
+                            <td>{{ activo.tipo }}</td>
+                            <td>{{ activo.descripcion }}</td>
+                            <td>{{ activo.valor_inicial }}</td>
+                            <td>{{ activo.valor_residual }}</td>
+                            <td>{{ activo.depen_acomulada }}</td>
+                            <td>{{ activo.area.nombre }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="8">No tienes activos asignados.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 {% endblock %}

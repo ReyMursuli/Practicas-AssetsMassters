@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}Todos los Activos{% endblock %}
+{% block content %}
+<h2 class="text-primary">Todos los Activos</h2>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Código</th>
+            <th>Rótulo</th>
+            <th>Tipo</th>
+            <th>Descripción</th>
+            <th>Valor Inicial</th>
+            <th>Valor Residual</th>
+            <th>Depreciación</th>
+            <th>Area</th>
+            <th>Responsable</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for activo in activos %}
+        <tr>
+            <td>{{ activo.cod_interno }}</td>
+            <td>{{ activo.rotulo }}</td>
+            <td>{{ activo.tipo }}</td>
+            <td>{{ activo.descripcion }}</td>
+            <td>{{ activo.valor_inicial }}</td>
+            <td>{{ activo.valor_residual }}</td>
+            <td>{{ activo.depen_acomulada }}</td>
+            <td>{{ activo.area.nombre }}</td>
+            <td>{{ activo.responsable.nombre }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="7">No hay activos registrados.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

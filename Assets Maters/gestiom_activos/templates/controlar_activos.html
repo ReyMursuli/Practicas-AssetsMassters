@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+{% block title %}Controlar Activos{% endblock %}
+{% block content %}
+<a href="javascript:history.back()" class="btn btn-outline-secondary mb-3" title="Volver">
+    <span style="font-size:1.5em;">&#8592;</span>
+</a>
+<h2>Control de Activos</h2>
+<form method="get" class="mb-3">
+    <div class="input-group">
+        <input type="text" name="q" class="form-control" placeholder="Buscar por tipo o descripción" value="{{ query }}">
+        <button type="submit" class="btn btn-secondary">Buscar</button>
+    </div>
+</form>
+
+<!-- Solo visible en móvil -->
+<div class="d-block d-md-none mb-3">
+    <button type="button" class="btn btn-success" onclick="iniciarEscaneo()">Escanear QR</button>
+    <div id="qr-reader" style="width:100%; max-width:350px; margin:auto; display:none;"></div>
+</div>
+
+<form method="post">
+    {% csrf_token %}
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Encontrado</th>
+                <th>Código</th>
+                <th>Tipo</th>
+                <th>Descripción</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for activo in activos %}
+            <tr>
+                <td>
+                    <input type="checkbox" name="encontrado" value="{{ activo.id }}">
+                </td>
+                <td>{{ activo.cod_interno }}</td>
+                <td>{{ activo.tipo }}</td>
+                <td>{{ activo.rotulo }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <button type="submit" class="btn btn-primary">Guardar Control</button>
+</form>
+
+{% if resultado %}
+    <h3 class="mt-4">Resumen</h3>
+    <div class="alert alert-success">
+        <strong>Encontrados:</strong>
+        <ul>
+            {% for a in resultado.encontrados %}
+                <li>{{ a.cod_interno }} - {{ a.tipo }} - {{ a.rotulo }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="alert alert-danger">
+        <strong>No encontrados:</strong>
+        <ul>
+            {% for a in resultado.no_encontrados %}
+                <li>{{ a.cod_interno }} - {{ a.tipo }} - {{ a.descripcion }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}
+
+<script src="https://unpkg.com/html5-qrcode"></script>
+<script>
+function iniciarEscaneo() {
+    document.getElementById('qr-reader').style.display = 'block';
+    if (!window.qrScanner) {
+        window.qrScanner = new Html5Qrcode("qr-reader");
+        window.qrScanner.start(
+            { facingMode: "environment" },
+            {
+                fps: 10,
+                qrbox: 250
+            },
+            qrCodeMessage => {
+                // Cuando se escanea un QR, buscar el checkbox con ese código y marcarlo
+                marcarActivoPorCodigo(qrCodeMessage);
+                window.qrScanner.stop();
+                document.getElementById('qr-reader').style.display = 'none';
+            },
+            errorMessage => {
+                console.error('Error al iniciar el escaner:', errorMessage);
+            }
+        );
+    } else {
+        window.qrScanner.start(
+            { facingMode: "environment" },
+            { fps: 10, qrbox: 250 },
+            qrCodeMessage => {
+                marcarActivoPorCodigo(qrCodeMessage);
+                window.qrScanner.stop();
+                document.getElementById('qr-reader').style.display = 'none';
+            }
+        );
+    }
+}
+
+function marcarActivoPorCodigo(codigo) {
+    // Busca el checkbox cuyo valor coincida con el código interno del activo
+    let filas = document.querySelectorAll('table tbody tr');
+    let encontrado = false;
+    filas.forEach(fila => {
+        let cod = fila.children[1].innerText.trim();
+        if (cod === codigo) {
+            fila.children[0].querySelector('input[type=checkbox]').checked = true;
+            fila.classList.add('table-success');
+            encontrado = true;
+        }
+    });
+    if (!encontrado) {
+        alert('Activo no encontrado en la lista.');
+    }
+}
+</script>
+{% endblock %}

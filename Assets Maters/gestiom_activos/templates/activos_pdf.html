@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Activos</title>
+    <style>
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid #333; padding: 8px; }
+        th { background: #eee; }
+    </style>
+</head>
+<body>
+    <h2>Lista de Activos</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Código</th>
+                <th>Rotulo</th>
+                <th>Tipo</th>
+                <th>Descripción</th>
+                <th>Valor Inicial</th>
+                <th>Valor Residual</th>
+                <th>Depreciación</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for activo in activos %}
+            <tr>
+                <td>{{ activo.cod_interno }}</td>
+                <td>{{ activo.rotulo }}</td>
+                <td>{{ activo.tipo }}</td>
+                <td>{{ activo.descripcion }}</td>
+                <td>{{ activo.valor_inicial }}</td>
+                <td>{{ activo.valor_residual }}</td>
+                <td>{{ activo.depen_acomulada }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

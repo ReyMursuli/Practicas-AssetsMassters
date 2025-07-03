@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}Activos de {{ area.nombre }}{% endblock %}
+{% block content %}
+<h2 class="text-primary">Activos en {{ area.nombre }}</h2>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Código</th>
+            <th>Rótulo</th>
+            <th>Tipo</th>
+            <th>Descripción</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for activo in activos %}
+        <tr>
+            <td>{{ activo.cod_interno }}</td>
+            <td>{{ activo.rotulo }}</td>
+            <td>{{ activo.tipo }}</td>
+            <td>{{ activo.descripcion }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="4">No hay activos en esta área.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<a href="{% url 'gestiom_activos:listar_areas' %}" class="btn btn-outline-secondary mt-3">&#8592; Volver a Áreas</a>
+{% endblock %} 

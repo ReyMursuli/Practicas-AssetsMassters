@@ -1,6 +1,100 @@
 {% extends 'base.html' %}
 {% block title %}Inicio{% endblock %}
 {% block content %}
-    <h2 class="text-primary">Bienvenido, {{ usuario.nombre }}</h2>
-    <p>Este es tu panel como usuario general.</p>
+<style>
+    body, html {
+        height: 100%;
+        margin: 0;
+        background: #f4f9ff;
+    }
+    .main-container {
+        display: flex;
+        min-height: 100vh;
+        height: 100vh;
+    }
+    .sidebar-custom {
+        width: 250px;
+        background: linear-gradient(180deg, #0033cc 0%, #0055ff 100%);
+        color: #fff;
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        padding-top: 40px;
+        box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+        min-height: 100vh;
+        height: 100vh;
+    }
+    .sidebar-custom .nav-link {
+        color: #fff;
+        font-size: 1.3em;
+        margin-bottom: 20px;
+        border-radius: 10px;
+        transition: background 0.2s, color 0.2s;
+        padding: 15px 20px;
+        font-weight: 500;
+        letter-spacing: 1px;
+        width: 90%;
+        text-align: left;
+    }
+    .sidebar-custom .nav-link.active,
+    .sidebar-custom .nav-link:hover {
+        background: #fff;
+        color: #0033cc;
+        text-decoration: none;
+        font-weight: bold;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    .sidebar-custom .nav-link i {
+        margin-right: 10px;
+    }
+    .content-area {
+        flex: 1;
+        padding: 40px 30px 30px 30px;
+        background: #f4f9ff;
+        min-height: 100vh;
+        overflow-y: auto;
+    }
+    @media (max-width: 768px) {
+        .main-container {
+            flex-direction: column;
+        }
+        .sidebar-custom {
+            width: 100%;
+            min-height: auto;
+            height: auto;
+            flex-direction: row;
+            justify-content: space-around;
+            padding-top: 10px;
+        }
+        .content-area {
+            padding: 20px 5px;
+        }
+    }
+</style>
+
+<div class="main-container">
+    <!-- Sidebar -->
+    <nav class="sidebar-custom">
+        <a class="nav-link mb-3 {% if request.path == '/gestiom_activos/listar_activos/' %}active{% endif %}" href="{% url 'gestiom_activos:listar_activos' %}">
+            <i class="bi bi-box-seam"></i> Activos
+        </a>
+        <a class="nav-link mb-3 {% if request.path == '/gestiom_activos/areas/' %}active{% endif %}" href="{% url 'gestiom_activos:listar_areas' %}">
+            <i class="bi bi-geo-alt"></i> Áreas
+        </a>
+        <a class="nav-link mb-3" href="{% url 'gestiom_activos:generar_reporte_pdf' %}">
+            <i class="bi bi-bar-chart"></i> Reportes
+        </a>
+    </nav>
+
+    <!-- Contenido principal -->
+    <div class="content-area">
+        {% block dashboard_content %}
+        <!-- Aquí se mostrará el contenido dinámico: activos o áreas -->
+        <h2 class="text-primary">Bienvenido, {{ usuario.nombre }}</h2>
+        <p>Selecciona una opción del menú para ver los activos o las áreas.</p>
+        {% endblock %}
+    </div>
+</div>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 {% endblock %}
+  

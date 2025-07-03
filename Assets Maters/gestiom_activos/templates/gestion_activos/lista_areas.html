@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}Áreas{% endblock %}
+{% block content %}
+<h2 class="text-primary">Áreas</h2>
+<div class="row">
+    {% for area in areas %}
+    <div class="col-md-4 mb-4">
+        <a href="{% url 'gestiom_activos:activos_por_area' area.id %}" class="text-decoration-none">
+            <div class="card shadow-sm h-100" style="background: #e3f0ff;">
+                <div class="card-body text-center">
+                    <h5 class="card-title text-primary">{{ area.nombre }}</h5>
+                    <p class="card-text text-secondary">{{ area.codigo }}</p>
+                </div>
+            </div>
+        </a>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <div class="alert alert-info">No hay áreas registradas.</div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %} 
